@@ -13,7 +13,7 @@ public class Plugin : BaseUnityPlugin
     internal static LiveryLoader _liveryLoader;
     public static Texture2D texture = new Texture2D(2, 2);
     public static AssetBundle bundle;
-    public static string selectedTexture = "test1.png";
+    public static string selectedTexture = "test2.png";
 
     private void Awake()
     {
@@ -39,38 +39,5 @@ public static class PlayerHeliPatch
         {
             return;
         }
-
-
-
-        //var materials = new List<Material>();
-        //var livery = Plugin.bundle.LoadAsset<Material>("Assets/livery.mat");
-
-        //// Body model
-        //MeshFilter bodyMesh = heliShell.GetComponent<MeshFilter>();
-        //bodyMesh.sharedMesh = Plugin.bundle.LoadAllAssets<Mesh>().Where(m => m.name == "SubMesh_0.002").FirstOrDefault();
-
-        //// tail model
-        //MeshFilter tailMesh = heliShell.GetComponentsInChildren<MeshFilter>(true).Where(m => m.name == "tail").FirstOrDefault();
-        //tailMesh.sharedMesh = Plugin.bundle.LoadAllAssets<Mesh>().Where(m => m.name == "SubMesh_0.004").FirstOrDefault();
-
-        //// body textures
-        //MeshRenderer bodyRenderer = heliShell.GetComponent<MeshRenderer>();
-        //bodyRenderer.GetMaterials(materials);
-        //livery.shader = materials[1].shader;
-        //materials[0] = livery;
-        //materials[3] = livery;
-        //materials[0].SetTexture("_texture", Plugin.texture);
-        //materials[0].SetTexture("_MainTex", Plugin.texture);
-        //materials[3].SetTexture("_texture", Plugin.texture);
-        //materials[3].SetTexture("_MainTex", Plugin.texture);
-        //bodyRenderer.SetMaterials(materials);
-
-        //// tail textures
-        //MeshRenderer tailRenderer = heliShell.GetComponentsInChildren<MeshRenderer>(true).Where(m => m.name == "tail").FirstOrDefault();
-        //tailRenderer.GetMaterials(materials);
-        //materials[1] = livery;
-        //materials[1].SetTexture("_texture", Plugin.texture);
-        //materials[1].SetTexture("_MainTex", Plugin.texture);
-        //tailRenderer.SetMaterials(materials);
     }
 }

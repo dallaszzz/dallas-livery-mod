@@ -25,7 +25,7 @@ namespace DallasSkinChanger
             var config = ModelConfigs.Where(i => i.ObjectName == heliName).FirstOrDefault();
             if (config.ObjectName == null)
             {
-                Plugin.Logger.LogError($"Failed to load model config for: {heliName}. Aborting load.");
+                Plugin.Logger.LogError($"Failed to find a model config for: {heliName}.");
                 return false;
             }
 
@@ -199,8 +199,89 @@ namespace DallasSkinChanger
                     },
                 ]
             };
-
             ModelConfigs.Add(defender);
+
+            var ah1f = new ModelConfig()
+            {
+                ObjectName = "AH-1F_Shell",
+                AssetBundleName = "liveryah1f",
+                Parts =
+                [
+                    new PartConfig()
+                    {
+                        PartName = "AH-1F_Shell",
+                        MeshName = "SubMesh_0",
+                        TexturedSubmeshes = [0, 1],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "healthtail/tailbox1model",
+                        MeshName = "SubMesh_0.003",
+                        TexturedSubmeshes = [0],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "healthtail/SyncElevator",
+                        MeshName = "SubMesh_0.023",
+                        TexturedSubmeshes = [0],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "healthskidL/SkidModelL",
+                        MeshName = "SubMesh_0.019",
+                        TexturedSubmeshes = [0],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "healthskidR/SkidModelR",
+                        MeshName = "SubMesh_0.020",
+                        TexturedSubmeshes = [0],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "AmmoBayLanimator/AmmobayL",
+                        MeshName = "SubMesh_0.016",
+                        TexturedSubmeshes = [0, 1],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "AmmoBayRanimator/AmmobayR",
+                        MeshName = "SubMesh_0.015",
+                        TexturedSubmeshes = [0, 1],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "Player_AH1F(Clone)/CockpitParent/CanopyDoors/DoorLeftAnglePivot/doorleft",
+                        MeshName = "SubMesh_0.018",
+                        TexturedSubmeshes = [2],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "Player_AH1F(Clone)/CockpitParent/CanopyDoors/DoorRightAnglePivot/doorright",
+                        MeshName = "SubMesh_0.017",
+                        TexturedSubmeshes = [2],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "pylonLMount/healthpylonL/pylonVisualL",
+                        MeshName = "SubMesh_0.021",
+                        TexturedSubmeshes = [0],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "pylonRMount/healthpylonR/pylonVisualR",
+                        MeshName = "SubMesh_0.022",
+                        TexturedSubmeshes = [0],
+                    },
+                    new PartConfig()
+                    {
+                        PartName = "healthTSU/sightbase/TSUvisual",
+                        MeshName = "SubMesh_0.024",
+                        TexturedSubmeshes = [0],
+                    },
+                ]
+            };
+            ModelConfigs.Add(ah1f);
 
             foreach (var config in ModelConfigs)
             {
