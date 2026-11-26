@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace DallasSkinChanger
@@ -13,27 +14,29 @@ namespace DallasSkinChanger
         private bool ConfigsLoaded = false;
         public Texture2D LiveryTex = new(2, 2);
         public Material LiveryMat;
+        public GameObject PlayerShell;
 
         // Loads a model and livery to an aircraft
-        public bool TryLoadLivery(GameObject heliShell)
+        public void LoadLivery(GameObject heliShell)
         {
             if (!ConfigsLoaded)
                 LoadHardcodedConfigs();
+            PlayerShell = heliShell;
 
-            var heliName = heliShell.name.Replace("(Clone)", "");
+            var heliName = PlayerShell.name.Replace("(Clone)", "");
 
             var config = ModelConfigs.Where(i => i.ObjectName == heliName).FirstOrDefault();
             if (config.ObjectName == null)
             {
                 Plugin.Logger.LogError($"Failed to find a model config for: {heliName}.");
-                return false;
+                return;
             }
 
             // Material and texture loading
             if (LiveryMat == null && !LoadLiveryMaterial())
-                return false;
+                return;
 
-            TryLoadLiveryTexture(Plugin.selectedTexture);
+            LiveryTex = TryLoadLiveryTexture(Plugin.selectedTexture);
             LiveryMat.SetTexture("_texture", LiveryTex);
             LiveryMat.SetTexture("_MainTex", LiveryTex);
 
@@ -44,7 +47,7 @@ namespace DallasSkinChanger
                 GameObject part = null;
                 if (partConfig.PartName != heliName)
                 {
-                    var foundPart = heliShell.transform.Find(partConfig.PartName);
+                    var foundPart = PlayerShell.transform.Find(partConfig.PartName);
                     if (foundPart == null)
                     {
                         Plugin.Logger.LogWarning($"Part {partConfig.PartName} not found.");
@@ -53,8 +56,8 @@ namespace DallasSkinChanger
                     part = foundPart.gameObject;
                 }
                 else
-                {
-                    part = heliShell;
+                { 
+                    part = PlayerShell;
                 }
 
                 if (!part.TryGetComponent<MeshFilter>(out var filter) ||
@@ -81,7 +84,26 @@ namespace DallasSkinChanger
             }
 
             Plugin.Logger.LogInfo($"Successfully loaded livery and mesh onto {heliName} with {config.Parts.Count()} parts.");
-            return true;
+            return;
+        }
+
+        public void ChangeSelectedLiveryTexture(string name)
+        {
+            Plugin.selectedTexture = name + ".png";
+            LiveryTex = TryLoadLiveryTexture(Plugin.selectedTexture);
+            LiveryMat.SetTexture("_texture", LiveryTex);
+            LiveryMat.SetTexture("_MainTex", LiveryTex);
+        }
+
+        public List<string> GetAllTextureNames()
+        {
+            List<string> files = [.. Directory.GetFiles(Paths.PluginPath + "/DallasSkinChanger/Liverys")];
+            List<string> fileNames = [];
+            foreach (var file in files)
+            {
+                fileNames.Add(Path.GetFileName(file).Replace(".png", ""));
+            }
+            return fileNames;
         }
 
         private bool LoadLiveryMaterial()
@@ -100,7 +122,7 @@ namespace DallasSkinChanger
         }
 
         // Loads a texture from a file in the livery folder
-        private bool TryLoadLiveryTexture(string name)
+        private Texture2D TryLoadLiveryTexture(string name)
         {
             Texture2D livery = new(2, 2);
             string texturePath = Path.Combine(Paths.PluginPath, "DallasSkinChanger/Liverys", name);
@@ -108,12 +130,12 @@ namespace DallasSkinChanger
 
             if (!livery.LoadImage(imageData))
             {
-                Plugin.Logger.LogError($"Failed to load textured: {name}");
-                return false;
+                Plugin.Logger.LogError($"Failed to load texture: {name}");
+                return livery;
             }
             Plugin.Logger.LogInfo($"Loaded texture: {name} ({livery.width}x{livery.height})");
             LiveryTex = livery;
-            return true;
+            return livery;
         }
 
         // Loads all meshes from an asset bundle and returns them in a list

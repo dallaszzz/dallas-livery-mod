@@ -59,4 +59,4 @@ nunit-*.xml
 *.user
 
 # game code reference
-lib/Assembly-CSharp.dll
+lib/*
